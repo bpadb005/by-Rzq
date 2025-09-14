@@ -52,7 +52,7 @@ local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
 local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 
 local function UpdatePlayerCount()
-    Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 end
 
 UpdatePlayerCount()
