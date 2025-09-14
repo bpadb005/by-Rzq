@@ -38,3 +38,24 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Tutorial", "activity") -- Title, Image
+
+local Tab = Window:CreateTab("Teleport", "map-pin") -- Title, Image
+
+local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
+
+local Tab = Window:CreateTab("Information", "info") -- Title, Image
+local Section = Tab:CreateSection("About Me")
+local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
+
+local Section = Tab:CreateSection("Server")
+local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
+local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+
+local function UpdatePlayerCount()
+    Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+end
+
+UpdatePlayerCount()
+
+game.Players.PlayerAdded:Connect(UpdatePlayerCount)
+game.Players.PlayerRemoving:Connect(UpdatePlayerCount)
