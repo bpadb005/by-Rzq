@@ -44,12 +44,15 @@ local Tab = Window:CreateTab("Teleport", "map-pin") -- Title, Image
 local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
 
 local Tab = Window:CreateTab("Information", "info") -- Title, Image
+local Section = Tab:CreateSection("About Me")
+local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
+
 local Section = Tab:CreateSection("Server")
-local ServerLabel = Tab:CreateLabel("Server ID: " .. game.JobId)
-local PlayerLabel = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
+local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 
 local function UpdatePlayerCount()
-    PlayerLabel:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+    Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 end
 
 UpdatePlayerCount()
