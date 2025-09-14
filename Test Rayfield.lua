@@ -43,4 +43,16 @@ local Tab = Window:CreateTab("Teleport", "map-pin") -- Title, Image
 
 local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
 
-local Tab = Window:CreateTab("Informasi", "info") -- Title, Image
+local InformationTab = Window:CreateTab("Information", "info") -- Title, Image
+local InformationSection = Tab:CreateSection("Server")
+local ServerLabel = Tab:CreateLabel("Server ID: " .. game.JobId)
+local PlayerLabel = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+
+local function UpdatePlayerCount()
+    PlayerLabel:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+end
+
+UpdatePlayerCount()
+
+game.Players.PlayerAdded:Connect(UpdatePlayerCount)
+game.Players.PlayerRemoving:Connect(UpdatePlayerCount)
