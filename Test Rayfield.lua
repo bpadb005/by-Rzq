@@ -39,7 +39,7 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("Tutorial", "activity") -- Title, Image
 
-local Tab = Window:CreateTab("Teleport", "mountain") -- Title, Image
+local Tab = Window:CreateTab("Teleport", "map-pinned") -- Title, Image
 
 local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
 
