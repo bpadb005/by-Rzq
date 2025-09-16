@@ -2,7 +2,7 @@ local main = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local up = Instance.new("TextButton")
 local down = Instance.new("TextButton")
-local onof = Instance.new("TextButton")
+local onoff = Instance.new("TextButton")
 local TextLabel = Instance.new("TextLabel")
 local plus = Instance.new("TextButton")
 local speed = Instance.new("TextLabel")
@@ -41,15 +41,15 @@ down.Text = "DOWN"
 down.TextColor3 = Color3.fromRGB(0, 0, 0)
 down.TextSize = 14.000
 
-onof.Name = "onof"
-onof.Parent = Frame
-onof.BackgroundColor3 = Color3.fromRGB(255, 249, 74)
-onof.Position = UDim2.new(0.702823281, 0, 0.491228074, 0)
-onof.Size = UDim2.new(0, 56, 0, 28)
-onof.Font = Enum.Font.SourceSans
-onof.Text = "fly"
-onof.TextColor3 = Color3.fromRGB(0, 0, 0)
-onof.TextSize = 14.000
+onoff.Name = "onoff"
+onoff.Parent = Frame
+onoff.BackgroundColor3 = Color3.fromRGB(255, 249, 74)
+onoff.Position = UDim2.new(0.702823281, 0, 0.491228074, 0)
+onoff.Size = UDim2.new(0, 56, 0, 28)
+onoff.Font = Enum.Font.SourceSans
+onoff.Text = "fly"
+onoff.TextColor3 = Color3.fromRGB(0, 0, 0)
+onoff.TextSize = 14.000
 
 TextLabel.Parent = Frame
 TextLabel.BackgroundColor3 = Color3.fromRGB(242, 60, 255)
@@ -144,7 +144,7 @@ Duration = 5;
 Frame.Active = true -- main = gui
 Frame.Draggable = true
 
-onof.MouseButton1Down:connect(function()
+onoff.MouseButton1Down:connect(function()
 
 	if nowe == true then
 		nowe = false
@@ -450,7 +450,7 @@ end)
 mini.MouseButton1Click:Connect(function()
 	up.Visible = false
 	down.Visible = false
-	onof.Visible = false
+	onoff.Visible = false
 	plus.Visible = false
 	speed.Visible = false
 	mine.Visible = false
@@ -463,7 +463,7 @@ end)
 mini2.MouseButton1Click:Connect(function()
 	up.Visible = true
 	down.Visible = true
-	onof.Visible = true
+	onoff.Visible = true
 	plus.Visible = true
 	speed.Visible = true
 	mine.Visible = true
