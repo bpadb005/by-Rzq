@@ -37,6 +37,11 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
+local Tab = Window:CreateTab("Tutorial", "activity")
+local Section = Tab:CreateSection("Cara Penggunaan")
+local Paragraph = Tab:CreateParagraph({Title = "-Create-", Content = "1. Tekan 'Get Place ID' untuk mendapatkan ID map yang saat ini dimainkan.\n2. Tekan 'Generate Server Code' untuk membuat kode random yang akan digunakan masuk ke Private Server.\n3. Tombol 'Copy Place ID & Server Code' untuk menyalin Place ID dan Server Code yang telah dibuat ke clipboard dan silahkan paste di mana pun sesuka kalian, fungsinya agar orang lain bisa join melalui Place ID dan Server Code yang kalian bagikan.\n4. Tekan 'Create Private Server' untuk membuat Private Server dan akan otomatis masuk ke dalam Private Server yang telah dibuat."})
+local Paragraph = Tab:CreateParagraph({Title = "-Manual-", Content = "Kalian wajib masuk dulu ke dalam map tujuan (server publik / private server punya teman) setelah itu masukkan Place ID dan Server Code punya orang lain dan tekan Join Server."})
+
 local md5, hmac, base64 = {}, {}, {}
 
 local T = {
@@ -249,10 +254,8 @@ local Button = Tab:CreateButton({
 })
 
 local Tab = Window:CreateTab("Information", "info")
-local Section = Tab:CreateSection("Tutorial")
-local Paragraph = Tab:CreateParagraph({Title = "'Create'", Content = "1. Wajib masuk ke dalam map tujuan.\n2. Tekan 'Get Place ID' untuk mendapatkan ID map yang saat ini dimainkan.\n3. Tekan 'Generate Server Code' untuk membuat kode random yang akan digunakan masuk ke Private Server.\n4. Tombol 'Copy Place ID & Server Code' untuk menyalin Place ID dan Server Code Private Server yang akan dibuat ke clipboard dan silahkan paste di mana pun sesuka kalian, fungsinya agar orang lain bisa join melalui Place ID dan Server Code yang kalian bagikan.\n5. Tekan 'Create Private Server' untuk membuat Private Server dan akan otomatis masuk ke dalam Private Server yang telah dibuat."})
-local Paragraph = Tab:CreateParagraph({Title = "'Manual'", Content = "Kalian wajib masuk dulu ke dalam map tujuan (server publik / private server punya teman) setelah itu masukkan 'Place ID' dan 'Server Code' yang kalian dapat setelah itu tekan 'Join Server'"})
-
+local Section = Tab:CreateSection("About Me")
+local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
 local Section = Tab:CreateSection("Server")
 local Label = Tab:CreateLabel("Place ID: " .. game.PlaceId)
 local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
