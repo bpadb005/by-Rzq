@@ -1,11 +1,11 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Rayfield Example Window",
+   Name = "Rayfield by Rzq",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Rayfield Interface Suite",
-   LoadingSubtitle = "by Sirius",
-   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   LoadingSubtitle = "by Rzq",
+   ShowText = "GUI", -- for mobile users to unhide rayfield, change if you'd like
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -48,6 +48,7 @@ local Section = Tab:CreateSection("About Me")
 local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
 
 local Section = Tab:CreateSection("Server")
+local Label = Tab:CreateLabel("Place ID: " .. game.PlaceId)
 local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
 local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 
