@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Rayfield by Rzq",
+   Name = "Private Server by Rzq",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Rayfield Interface Suite",
    LoadingSubtitle = "by Rzq",
@@ -162,14 +162,14 @@ local function GenerateReservedServerCode(placeId)
 	return accessCode, gameCode
 end
 
-local PlaceID = ""
+local PlaceID = 0
 local ServerCode = ""
 
 local Tab = Window:CreateTab("Server", "server") -- Title, Image
 
-local Section = Tab:CreateSection("Private Server")
+local Section = Tab:CreateSection("Create")
 local Button = Tab:CreateButton({
-   Name = "Use Current Place ID",
+   Name = "Get Place ID",
    Callback = function()
         PlaceID = game.PlaceId
         Rayfield:Notify({Title="Place ID", Content=""..PlaceID, Duration=3})
@@ -179,13 +179,31 @@ local Button = Tab:CreateButton({
 local Button = Tab:CreateButton({
    Name = "Generate Server Code",
    Callback = function()
-        if not PlaceID or PlaceID == 0 then
-            Rayfield:Notify({Title="Error", Content="Masukkan Place ID terlebih dahulu!", Duration=3})
+        if type(PlaceID) ~= "number" or PlaceID == 0 then
+            Rayfield:Notify({Title="Error", Content="Press 'Get Place ID'", Duration=3})
             return
         end
         local accessCode, gameCode = GenerateReservedServerCode(PlaceID)
         GeneratedCode = accessCode
-        Rayfield:Notify({Title="Server Code Generated", Content=accessCode, Duration=6})
+        Rayfield:Notify({Title="Server Code Generated", Content=accessCode, Duration=3})
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Copy Place ID & Server Code",
+   Callback = function()
+        if type(PlaceID) ~= "number" or PlaceID == 0 then
+            Rayfield:Notify({Title="Error", Content="There is no Place ID yet! Press 'Get Place ID' first!", Duration=3})
+            return
+        end
+        if not GeneratedCode then
+            Rayfield:Notify({Title="Error", Content="There is no Server Code to copy yet! Press 'Generate Server Code'", Duration=3})
+            return
+        end
+        
+        local infoText = string.format("Place ID: %d\nServer Code: %s", PlaceID, GeneratedCode)
+        setclipboard(infoText)
+        Rayfield:Notify({Title="Copied", Content="Place ID and Server Code copied successfully!", Duration=3})
    end,
 })
 
@@ -193,29 +211,17 @@ local Button = Tab:CreateButton({
    Name = "Create Private Server",
    Callback = function()
         if not GeneratedCode then
-            Rayfield:Notify({Title="Error", Content="Generate dulu server code-nya!", Duration=3})
+            Rayfield:Notify({Title="Error", Content="Press 'Generate Server Code'", Duration=3})
             return
         end
         game.RobloxReplicatedStorage.ContactListIrisInviteTeleport:FireServer(PlaceID, "", GeneratedCode)
    end,
 })
 
-local Button = Tab:CreateButton({
-   Name = "Copy Server Code",
-   Callback = function()
-        if not GeneratedCode then
-            Rayfield:Notify({Title="Error", Content="Belum ada server code untuk dicopy!", Duration=3})
-            return
-        end
-        setclipboard(GeneratedCode)
-        Rayfield:Notify({Title="Copied", Content="Server Code berhasil disalin!", Duration=3})
-   end,
-})
-
 local Section = Tab:CreateSection("Manual")
 local Input = Tab:CreateInput({
    Name = "Place ID",
-   PlaceholderText = "Masukkan Place ID",
+   PlaceholderText = "Enter Place ID",
    RemoveTextAfterFocusLost = false,
    Callback = function(Text)
         PlaceID = tonumber(Text) or 0
@@ -224,7 +230,7 @@ local Input = Tab:CreateInput({
 
 local Input = Tab:CreateInput({
    Name = "Server Code",
-   PlaceholderText = "Masukkan Server Code",
+   PlaceholderText = "Enter Server Code",
    RemoveTextAfterFocusLost = false,
    Callback = function(Text)
         ServerCode = Text
@@ -232,12 +238,31 @@ local Input = Tab:CreateInput({
 })
 
 local Button = Tab:CreateButton({
-   Name = "Join Server (Manual)",
+   Name = "Join Server",
    Callback = function()
-        if not PlaceID or PlaceID == 0 or not ServerCode or ServerCode == "" then
-            Rayfield:Notify({Title="Error", Content="Isi Place ID dan Server Code!", Duration=3})
+        if type(PlaceID) ~= "number" or PlaceID == 0 or not ServerCode or ServerCode == "" then
+            Rayfield:Notify({Title="Error", Content="Enter Place ID and Server Code!", Duration=3})
             return
         end
         game.RobloxReplicatedStorage.ContactListIrisInviteTeleport:FireServer(PlaceID, "", ServerCode)
    end,
 })
+
+local Tab = Window:CreateTab("Information", "info")
+local Section = Tab:CreateSection("Tutorial")
+local Paragraph = Tab:CreateParagraph({Title = "'Create'", Content = "1. Wajib masuk ke dalam map tujuan.\n2. Tekan 'Get Place ID' untuk mendapatkan ID map yang saat ini dimainkan.\n3. Tekan 'Generate Server Code' untuk membuat kode random yang akan digunakan masuk ke Private Server.\n4. Tombol 'Copy Place ID & Server Code' untuk menyalin Place ID dan Server Code Private Server yang akan dibuat ke clipboard dan silahkan paste di mana pun sesuka kalian, fungsinya agar orang lain bisa join melalui Place ID dan Server Code yang kalian bagikan.\n5. Tekan 'Create Private Server' untuk membuat Private Server dan akan otomatis masuk ke dalam Private Server yang telah dibuat."})
+local Paragraph = Tab:CreateParagraph({Title = "'Manual'", Content = "Kalian wajib masuk dulu ke dalam map tujuan (server publik / private server punya teman) setelah itu masukkan 'Place ID' dan 'Server Code' yang kalian dapat setelah itu tekan 'Join Server'"})
+
+local Section = Tab:CreateSection("Server")
+local Label = Tab:CreateLabel("Place ID: " .. game.PlaceId)
+local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
+local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+
+local function UpdatePlayerCount()
+Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+end
+
+UpdatePlayerCount()
+
+game.Players.PlayerAdded:Connect(UpdatePlayerCount)
+game.Players.PlayerRemoving:Connect(UpdatePlayerCount)
