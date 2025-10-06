@@ -48,11 +48,12 @@ local Section = Tab:CreateSection("About Me")
 local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
 
 local Section = Tab:CreateSection("Server")
+local Label = Tab:CreateLabel("Place ID: " .. game.PlaceId)
 local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
 local Label = Tab:CreateLabel("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 
 local function UpdatePlayerCount()
-    Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
+Label:Set("Jumlah: " .. #game.Players:GetPlayers() .. " pemain")
 end
 
 UpdatePlayerCount()
