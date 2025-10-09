@@ -255,7 +255,7 @@ local Button = Tab:CreateButton({
 
 local Tab = Window:CreateTab("Information", "info")
 local Section = Tab:CreateSection("About Me")
-local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n\n"})
+local Paragraph = Tab:CreateParagraph({Title = "Rzq", Content = "\n\n\n"})
 local Section = Tab:CreateSection("Server")
 local Label = Tab:CreateLabel("Place ID: " .. game.PlaceId)
 local Label = Tab:CreateLabel("Server ID: " .. game.JobId)
