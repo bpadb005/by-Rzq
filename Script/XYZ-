@@ -264,9 +264,15 @@ end)
 updateList()
 
 --// Animasi Minimize
-local minimized = false
+local lastScrollPos = 0
+
 minimizeBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
+
+	if minimized then
+		-- Simpan posisi scroll saat minimize
+		lastScrollPos = scrollFrame.CanvasPosition.Y
+	end
 
 	local frameTargetSize = minimized and UDim2.new(0, 280, 0, 40) or UDim2.new(0, 280, 0, 340)
 	local maskTargetSize = minimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -40)
@@ -279,11 +285,22 @@ minimizeBtn.MouseButton1Click:Connect(function()
 	):Play()
 
 	-- Animasi isi (terpotong halus)
-	TweenService:Create(
+	local maskTween = TweenService:Create(
 		contentMask,
 		TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 		{ Size = maskTargetSize }
-	):Play()
+	)
+	maskTween:Play()
+
+	if not minimized then
+		-- Buat tween CanvasPosition agar scroll kembali halus
+		local scrollTween = TweenService:Create(
+			scrollFrame,
+			TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{ CanvasPosition = Vector2.new(0, lastScrollPos) }
+		)
+		scrollTween:Play()
+	end
 end)
 
 --// Close Button
