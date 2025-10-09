@@ -130,6 +130,9 @@ scrollFrame.ScrollBarThickness = 6
 scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
 scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+scrollFrame.ClipsDescendants = true
+scrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
 scrollFrame.Parent = contentContainer
 
 Instance.new("UIListLayout", scrollFrame).Padding = UDim.new(0, 4)
