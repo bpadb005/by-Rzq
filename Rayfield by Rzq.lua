@@ -40,6 +40,23 @@ local Window = Rayfield:CreateWindow({
 local Tab = Window:CreateTab("Tutorial", "activity") -- Title, Image
 
 local Tab = Window:CreateTab("Teleport", "map-pin") -- Title, Image
+local Section = Tab:CreateSection("Manual")
+
+local function teleportPosition(pos)
+   local player = game.Players.LocalPlayer
+   if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+      player.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
+   end
+end
+
+local Button = Tab:CreateButton({
+   Name = "Spawn",
+   Callback = function()
+      teleportPosition(Vector3.new(717.30, 101.00, -890.05))
+   end,
+})
+
+local Section = Tab:CreateSection("Auto")
 
 local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
 
