@@ -58,6 +58,96 @@ local Button = Tab:CreateButton({
 
 local Section = Tab:CreateSection("Auto")
 
+local teleportList = {
+   Vector3.new(717.30, 101.00, -890.05),
+   Vector3.new(84.41, 141.00, 463.26),
+   Vector3.new(-401.28, 273.00, 772.38),
+   Vector3.new(-588.52, 385.00, -118.45),
+   Vector3.new(-487.00, 281.36, -356.03),
+   Vector3.new(-1291.93, 353.00, -538.26),
+   Vector3.new(-1798.55, 597.00, -436.68),
+   Vector3.new(-3347.49, 685.00, -728.86),
+   Vector3.new(-3366.14, 695.54, -755.33),
+}
+
+local function teleportPositions(pos)
+   local player = game.Players.LocalPlayer
+   if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+      player.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
+   end
+end
+
+local autoTeleport = false
+local currentIndex = 1
+local respawnAfterLast = false
+local teleportDelay = 3
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Teleport",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        autoTeleport = Value
+
+        if autoTeleport then
+            task.spawn(function()
+                while autoTeleport do
+                    -- === Teleport ke posisi saat ini ===
+                    local pos = teleportList[currentIndex]
+                    teleportPositions(pos)
+
+                    -- === Atur indeks untuk teleport berikutnya ===
+                    currentIndex += 1
+                    if currentIndex > #teleportList then
+                        currentIndex = 1
+                    end
+
+                    -- === Respawn jika sampai di lokasi terakhir ===
+                    if currentIndex == 1 and respawnAfterLast then
+                        local player = game.Players.LocalPlayer
+                        if player.Character and player.Character:FindFirstChild("Humanoid") then
+                            player.Character.Humanoid.Health = 0 -- respawn
+                        end
+
+                        -- Tunggu karakter respawn siap
+                        repeat
+                            task.wait(0.1)
+                        until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    end
+
+                    -- === Delay antar teleport ===
+                    local loopCount = math.floor(teleportDelay * 10)
+                    for i = 1, loopCount do
+                        if not autoTeleport then break end
+                        task.wait(0.1)
+                    end
+                end
+            end)
+        end
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Respawn",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        respawnAfterLast = Value
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "Delay Teleport",
+   Range = {0.1, 10},
+   Increment = 0.1,
+   Suffix = " detik",
+   CurrentValue = teleportDelay,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        teleportDelay = Value
+   end,
+})
+
 local Tab = Window:CreateTab("Misc", "flame") -- Title, Image
 
 local Tab = Window:CreateTab("Information", "info") -- Title, Image
