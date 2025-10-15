@@ -8,6 +8,7 @@ gui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 290, 0, 340)
+frame.Position = UDim2.new(0.5, -145, 0.5, -170)
 frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 frame.BorderSizePixel = 0
 frame.Active = true
