@@ -245,6 +245,12 @@ end
 local function bindCharacter(char)
     character = char
     humanoid = char:WaitForChild("Humanoid")
+
+    humanoid.HealthChanged:Connect(function(health)
+        if health <= 0 then
+            deactivateSonicMode()
+        end
+    end)
 end
 
 player.CharacterAdded:Connect(bindCharacter)
