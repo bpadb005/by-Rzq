@@ -1,267 +1,282 @@
-local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-local gui = Instance.new("ScreenGui")
-gui.Parent = player:WaitForChild("PlayerGui")
-gui.ResetOnSpawn = false
+local localPlayer = Players.LocalPlayer
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 290, 0, 340)
-frame.Position = UDim2.new(0.5, -145, 0.5, -170)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.ClipsDescendants = true
-frame.Parent = gui
+local mainGui = Instance.new("ScreenGui")
+mainGui.Name = "XYZ"
+mainGui.ResetOnSpawn = false
+mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
-local frameCorner = Instance.new("UICorner")
-frameCorner.CornerRadius = UDim.new(0, 12)
-frameCorner.Parent = frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 290, 0, 340)
+mainFrame.Position = UDim2.new(0.5, -145, 0.5, -170)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = mainGui
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 35)
-title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-title.TextColor3 = Color3.fromRGB(230, 230, 230)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.BorderSizePixel = 0
-title.Text = "XYZ\nby Rzq"
-title.Parent = frame
+local mainFrameCorner = Instance.new("UICorner")
+mainFrameCorner.CornerRadius = UDim.new(0, 12)
+mainFrameCorner.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 35)
+titleLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+titleLabel.TextColor3 = Color3.fromRGB(230, 230, 230)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 16
+titleLabel.BorderSizePixel = 0
+titleLabel.Text = "XYZ\nby Rzq"
+titleLabel.Parent = mainFrame
 
 local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 12)
-titleCorner.Parent = title
+titleCorner.Parent = titleLabel
 
-local function createHeaderButton(text, pos, color)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 22, 0, 22)
-    btn.Position = pos
-    btn.BackgroundColor3 = color
-    btn.TextColor3 = Color3.fromRGB(230, 230, 230)
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = 18
-    btn.BorderSizePixel = 0
-    btn.AutoButtonColor = false
-    btn.Text = text
-    btn.Parent = frame
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
-    corner.Parent = btn
-    return btn
+local function createHeaderButton(buttonText, buttonPosition, buttonColor)
+    local headerButton = Instance.new("TextButton")
+    headerButton.Size = UDim2.new(0, 22, 0, 22)
+    headerButton.Position = buttonPosition
+    headerButton.BackgroundColor3 = buttonColor
+    headerButton.TextColor3 = Color3.fromRGB(230, 230, 230)
+    headerButton.Font = Enum.Font.GothamBold
+    headerButton.TextSize = 18
+    headerButton.BorderSizePixel = 0
+    headerButton.AutoButtonColor = false
+    headerButton.Text = buttonText
+    headerButton.Parent = mainFrame
+
+    local headerButtonCorner = Instance.new("UICorner")
+    headerButtonCorner.CornerRadius = UDim.new(0, 6)
+    headerButtonCorner.Parent = headerButton
+
+    return headerButton
 end
 
-local minimizeBtn = createHeaderButton("-", UDim2.new(0, 8, 0, 7), Color3.fromRGB(60, 60, 60))
-local closeBtn = createHeaderButton("×", UDim2.new(1, -30, 0, 7), Color3.fromRGB(90, 40, 40))
+local minimizeButton = createHeaderButton("-", UDim2.new(0, 8, 0, 7), Color3.fromRGB(60, 60, 60))
+local closeButton = createHeaderButton("×", UDim2.new(1, -30, 0, 7), Color3.fromRGB(90, 40, 40))
 
-local function hoverEffect(btn, normal, hover)
-    btn.MouseEnter:Connect(function()
-        btn.BackgroundColor3 = hover
+local function hoverEffect(targetButton, normalColor, hoverColor)
+    targetButton.MouseEnter:Connect(function()
+        targetButton.BackgroundColor3 = hoverColor
     end)
-    btn.MouseLeave:Connect(function()
-        btn.BackgroundColor3 = normal
+    targetButton.MouseLeave:Connect(function()
+        targetButton.BackgroundColor3 = normalColor
     end)
 end
 
-hoverEffect(minimizeBtn, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
-hoverEffect(closeBtn, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50))
+hoverEffect(minimizeButton, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
+hoverEffect(closeButton, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50))
 
-local contentMask = Instance.new("Frame")
-contentMask.Size = UDim2.new(1, 0, 1, -40)
-contentMask.Position = UDim2.new(0, 0, 0, 40)
-contentMask.BackgroundTransparency = 1
-contentMask.ClipsDescendants = true
-contentMask.Parent = frame
+local contentMaskFrame = Instance.new("Frame")
+contentMaskFrame.Name = "ContentMaskFrame"
+contentMaskFrame.Size = UDim2.new(1, 0, 1, -40)
+contentMaskFrame.Position = UDim2.new(0, 0, 0, 40)
+contentMaskFrame.BackgroundTransparency = 1
+contentMaskFrame.ClipsDescendants = true
+contentMaskFrame.Parent = mainFrame
 
-local contentContainer = Instance.new("Frame")
-contentContainer.Size = UDim2.new(1, 0, 1, 0)
-contentContainer.BackgroundTransparency = 1
-contentContainer.Parent = contentMask
+local contentContainerFrame = Instance.new("Frame")
+contentContainerFrame.Name = "ContentContainerFrame"
+contentContainerFrame.Size = UDim2.new(1, 0, 1, 0)
+contentContainerFrame.BackgroundTransparency = 1
+contentContainerFrame.Parent = contentMaskFrame
 
-local buttonContainer = Instance.new("Frame")
-buttonContainer.Size = UDim2.new(1, 0, 0, 110)
-buttonContainer.BackgroundTransparency = 1
-buttonContainer.Parent = contentContainer
+local buttonContainerFrame = Instance.new("Frame")
+buttonContainerFrame.Name = "ButtonContainerFrame"
+buttonContainerFrame.Size = UDim2.new(1, 0, 0, 110)
+buttonContainerFrame.BackgroundTransparency = 1
+buttonContainerFrame.Parent = contentContainerFrame
 
-local buttonLayout = Instance.new("UIListLayout")
-buttonLayout.Padding = UDim.new(0, 6)
-buttonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-buttonLayout.FillDirection = Enum.FillDirection.Vertical
-buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
-buttonLayout.VerticalAlignment = Enum.VerticalAlignment.Top
-buttonLayout.Parent = buttonContainer
+local buttonListLayout = Instance.new("UIListLayout")
+buttonListLayout.Padding = UDim.new(0, 6)
+buttonListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+buttonListLayout.FillDirection = Enum.FillDirection.Vertical
+buttonListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+buttonListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+buttonListLayout.Parent = buttonContainerFrame
 
-local xyzrtLabel = Instance.new("TextLabel")
-xyzrtLabel.Size = UDim2.new(1, -30, 0, 24)
-xyzrtLabel.Position = UDim2.new(0, 15, 0, 0)
-xyzrtLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-xyzrtLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
-xyzrtLabel.Font = Enum.Font.Code
-xyzrtLabel.TextSize = 14
-xyzrtLabel.TextXAlignment = Enum.TextXAlignment.Center
-xyzrtLabel.Text = "X:- | Y:- | Z:-"
-xyzrtLabel.Parent = buttonContainer
+local xyzLabel = Instance.new("TextLabel")
+xyzLabel.Name = "XYZLabel"
+xyzLabel.Size = UDim2.new(1, -30, 0, 24)
+xyzLabel.Position = UDim2.new(0, 15, 0, 0)
+xyzLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+xyzLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+xyzLabel.Font = Enum.Font.Code
+xyzLabel.TextSize = 14
+xyzLabel.TextXAlignment = Enum.TextXAlignment.Center
+xyzLabel.Text = "X:- | Y:- | Z:-"
+xyzLabel.Parent = buttonContainerFrame
 
-local xyzrtCorner = Instance.new("UICorner")
-xyzrtCorner.CornerRadius = UDim.new(0, 6)
-xyzrtCorner.Parent = xyzrtLabel
+local xyzLabelCorner = Instance.new("UICorner")
+xyzLabelCorner.CornerRadius = UDim.new(0, 6)
+xyzLabelCorner.Parent = xyzLabel
 
-local function makeButton(text, color)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -20, 0, 32)
-    btn.BackgroundColor3 = color
-    btn.Text = text
-    btn.Font = Enum.Font.GothamSemibold
-    btn.TextSize = 14
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.BorderSizePixel = 0
-    btn.AutoButtonColor = false
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = btn
-    btn.MouseEnter:Connect(function()
-        btn.BackgroundColor3 = color:Lerp(Color3.new(1, 1, 1), 0.1)
+local function createButton(buttonText, buttonColor)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, -20, 0, 32)
+    button.BackgroundColor3 = buttonColor
+    button.Text = buttonText
+    button.Font = Enum.Font.GothamSemibold
+    button.TextSize = 14
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BorderSizePixel = 0
+    button.AutoButtonColor = false
+
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 8)
+    buttonCorner.Parent = button
+
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = buttonColor:Lerp(Color3.new(1,1,1), 0.1)
     end)
-    btn.MouseLeave:Connect(function()
-        btn.BackgroundColor3 = color
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = buttonColor
     end)
-    return btn
+
+    return button
 end
 
-local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 1, -160)
-scrollFrame.Position = UDim2.new(0, 5, 0, 150)
-scrollFrame.BackgroundTransparency = 1
-scrollFrame.BorderSizePixel = 0
-scrollFrame.ScrollBarThickness = 6
-scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
-scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-scrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
-scrollFrame.ClipsDescendants = true
-scrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
-scrollFrame.Parent = contentContainer
+local xyzScrollFrame = Instance.new("ScrollingFrame")
+xyzScrollFrame.Name = "XYZScrollFrame"
+xyzScrollFrame.Size = UDim2.new(1, -10, 1, -160)
+xyzScrollFrame.Position = UDim2.new(0, 5, 0, 150)
+xyzScrollFrame.BackgroundTransparency = 1
+xyzScrollFrame.BorderSizePixel = 0
+xyzScrollFrame.ScrollBarThickness = 6
+xyzScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+xyzScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+xyzScrollFrame.CanvasSize = UDim2.new(0,0,0,0)
+xyzScrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+xyzScrollFrame.ClipsDescendants = true
+xyzScrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.None
+xyzScrollFrame.Parent = contentContainerFrame
 
-local scrollLayout = Instance.new("UIListLayout")
-scrollLayout.Padding = UDim.new(0, 4)
-scrollLayout.Parent = scrollFrame
+local xyzScrollLayout = Instance.new("UIListLayout")
+xyzScrollLayout.Padding = UDim.new(0, 4)
+xyzScrollLayout.Parent = xyzScrollFrame
 
 local savedXYZ = {}
 
-local function updateList()
-    for _, v in pairs(scrollFrame:GetChildren()) do
-        if v:IsA("Frame") or v:IsA("TextLabel") then
-            v:Destroy()
+local function updateXYZList()
+    for _, child in pairs(xyzScrollFrame:GetChildren()) do
+        if child:IsA("Frame") or child:IsA("TextLabel") then
+            child:Destroy()
         end
     end
 
     local padding = Instance.new("UIPadding")
     padding.PaddingLeft = UDim.new(0, 10)
-    padding.Parent = scrollFrame
+    padding.Parent = xyzScrollFrame
 
     if #savedXYZ == 0 then
-        local empty = Instance.new("TextLabel")
-        empty.Size = UDim2.new(1, -10, 0, 22)
-        empty.BackgroundTransparency = 1
-        empty.Text = "Belum ada XYZ tersimpan."
-        empty.TextColor3 = Color3.fromRGB(150, 150, 150)
-        empty.Font = Enum.Font.Gotham
-        empty.TextSize = 13
-        empty.TextXAlignment = Enum.TextXAlignment.Center
-        empty.Parent = scrollFrame
+        local emptyLabel = Instance.new("TextLabel")
+        emptyLabel.Size = UDim2.new(1, -10, 0, 22)
+        emptyLabel.BackgroundTransparency = 1
+        emptyLabel.Text = "Belum ada XYZ tersimpan."
+        emptyLabel.TextColor3 = Color3.fromRGB(150,150,150)
+        emptyLabel.Font = Enum.Font.Gotham
+        emptyLabel.TextSize = 13
+        emptyLabel.TextXAlignment = Enum.TextXAlignment.Center
+        emptyLabel.Parent = xyzScrollFrame
         return
     end
 
     for i, pos in ipairs(savedXYZ) do
         local entryFrame = Instance.new("Frame")
         entryFrame.Size = UDim2.new(1, -10, 0, 24)
-        entryFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        entryFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
         entryFrame.BorderSizePixel = 0
-        entryFrame.Parent = scrollFrame
+        entryFrame.Parent = xyzScrollFrame
 
         local entryCorner = Instance.new("UICorner")
         entryCorner.CornerRadius = UDim.new(0, 6)
         entryCorner.Parent = entryFrame
 
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, -70, 1, 0)
-        label.BackgroundTransparency = 1
-        label.TextColor3 = Color3.fromRGB(200, 200, 200)
-        label.Font = Enum.Font.Code
-        label.TextSize = 13
-        label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Text = string.format("%d. (%.2f, %.2f, %.2f)", i, pos.X, pos.Y, pos.Z)
-        label.Parent = entryFrame
+        local entryLabel = Instance.new("TextLabel")
+        entryLabel.Size = UDim2.new(1, -70, 1, 0)
+        entryLabel.BackgroundTransparency = 1
+        entryLabel.TextColor3 = Color3.fromRGB(200,200,200)
+        entryLabel.Font = Enum.Font.Code
+        entryLabel.TextSize = 13
+        entryLabel.TextXAlignment = Enum.TextXAlignment.Left
+        entryLabel.Text = string.format("%d. (%.2f, %.2f, %.2f)", i, pos.X, pos.Y, pos.Z)
+        entryLabel.Parent = entryFrame
 
         local labelPadding = Instance.new("UIPadding")
         labelPadding.PaddingLeft = UDim.new(0, 8)
-        labelPadding.Parent = label
+        labelPadding.Parent = entryLabel
 
-        local tpBtn = Instance.new("TextButton")
-        tpBtn.Size = UDim2.new(0, 18, 0, 18)
-        tpBtn.Position = UDim2.new(1, -50, 0, 3)
-        tpBtn.BackgroundColor3 = Color3.fromRGB(70, 160, 240)
-        tpBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        tpBtn.Font = Enum.Font.GothamBold
-        tpBtn.TextSize = 14
-        tpBtn.Text = "￫"
-        tpBtn.BorderSizePixel = 0
-        tpBtn.Parent = entryFrame
+        local teleportButton = Instance.new("TextButton")
+        teleportButton.Size = UDim2.new(0, 18, 0, 18)
+        teleportButton.Position = UDim2.new(1, -50, 0, 3)
+        teleportButton.BackgroundColor3 = Color3.fromRGB(70,160,240)
+        teleportButton.TextColor3 = Color3.fromRGB(255,255,255)
+        teleportButton.Font = Enum.Font.GothamBold
+        teleportButton.TextSize = 14
+        teleportButton.Text = "￫"
+        teleportButton.BorderSizePixel = 0
+        teleportButton.Parent = entryFrame
 
-        local tpCorner = Instance.new("UICorner")
-        tpCorner.CornerRadius = UDim.new(0, 6)
-        tpCorner.Parent = tpBtn
+        local teleportButtonCorner = Instance.new("UICorner")
+        teleportButtonCorner.CornerRadius = UDim.new(0, 6)
+        teleportButtonCorner.Parent = teleportButton
 
-        tpBtn.MouseButton1Click:Connect(function()
-            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        teleportButton.MouseButton1Click:Connect(function()
+            local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
                 hrp.CFrame = CFrame.new(pos)
             end
         end)
 
-        local delBtn = Instance.new("TextButton")
-        delBtn.Size = UDim2.new(0, 18, 0, 18)
-        delBtn.Position = UDim2.new(1, -27, 0, 3)
-        delBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-        delBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        delBtn.Font = Enum.Font.GothamBold
-        delBtn.TextSize = 16
-        delBtn.Text = "×"
-        delBtn.BorderSizePixel = 0
-        delBtn.Parent = entryFrame
+        local deleteButton = Instance.new("TextButton")
+        deleteButton.Size = UDim2.new(0, 18, 0, 18)
+        deleteButton.Position = UDim2.new(1, -27, 0, 3)
+        deleteButton.BackgroundColor3 = Color3.fromRGB(180,50,50)
+        deleteButton.TextColor3 = Color3.fromRGB(255,255,255)
+        deleteButton.Font = Enum.Font.GothamBold
+        deleteButton.TextSize = 16
+        deleteButton.Text = "×"
+        deleteButton.BorderSizePixel = 0
+        deleteButton.Parent = entryFrame
 
-        local delCorner = Instance.new("UICorner")
-        delCorner.CornerRadius = UDim.new(0, 6)
-        delCorner.Parent = delBtn
+        local deleteButtonCorner = Instance.new("UICorner")
+        deleteButtonCorner.CornerRadius = UDim.new(0,6)
+        deleteButtonCorner.Parent = deleteButton
 
-        delBtn.MouseButton1Click:Connect(function()
+        deleteButton.MouseButton1Click:Connect(function()
             table.remove(savedXYZ, i)
-            updateList()
+            updateXYZList()
         end)
     end
 end
 
-local saveBtn = makeButton("Simpan", Color3.fromRGB(50, 170, 90))
-saveBtn.Parent = buttonContainer
-saveBtn.MouseButton1Click:Connect(function()
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+local saveButton = createButton("Simpan", Color3.fromRGB(50,170,90))
+saveButton.Parent = buttonContainerFrame
+saveButton.MouseButton1Click:Connect(function()
+    local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         table.insert(savedXYZ, hrp.Position)
-        updateList()
+        updateXYZList()
     end
 end)
 
-local clearBtn = makeButton("Hapus Semua", Color3.fromRGB(200, 50, 50))
-clearBtn.Parent = buttonContainer
-clearBtn.MouseButton1Click:Connect(function()
+local clearButton = createButton("Hapus Semua", Color3.fromRGB(200,50,50))
+clearButton.Parent = buttonContainerFrame
+clearButton.MouseButton1Click:Connect(function()
     savedXYZ = {}
-    updateList()
+    updateXYZList()
 end)
 
-local copyBtn = makeButton("Salin Semua", Color3.fromRGB(60, 120, 220))
-copyBtn.Parent = buttonContainer
-copyBtn.MouseButton1Click:Connect(function()
+local copyButton = createButton("Salin Semua", Color3.fromRGB(60,120,220))
+copyButton.Parent = buttonContainerFrame
+copyButton.MouseButton1Click:Connect(function()
     if #savedXYZ == 0 then
         setclipboard("Tidak ada XYZ tersimpan.")
         return
@@ -273,37 +288,38 @@ copyBtn.MouseButton1Click:Connect(function()
     setclipboard(table.concat(lines, "\n"))
 end)
 
-updateList()
+updateXYZList()
 
+local isMinimized = false
 local lastScrollPos = 0
-local minimized = false
 
-minimizeBtn.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    if minimized then
-        lastScrollPos = scrollFrame.CanvasPosition.Y
+minimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    if isMinimized then
+        lastScrollPos = xyzScrollFrame.CanvasPosition.Y
     end
-    local frameTargetSize = minimized and UDim2.new(0, 290, 0, 40) or UDim2.new(0, 290, 0, 340)
-    local maskTargetSize = minimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -40)
-    local frameTween = TweenService:Create(frame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = frameTargetSize })
-    local maskTween = TweenService:Create(contentMask, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = maskTargetSize })
-    frameTween:Play()
-    maskTween:Play()
-    if not minimized then
-        TweenService:Create(scrollFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { CanvasPosition = Vector2.new(0, lastScrollPos) }):Play()
+
+    local frameTargetSize = isMinimized and UDim2.new(0, 290, 0, 40) or UDim2.new(0, 290, 0, 340)
+    local maskTargetSize = isMinimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -40)
+
+    TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = frameTargetSize}):Play()
+    TweenService:Create(contentMaskFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = maskTargetSize}):Play()
+
+    if not isMinimized then
+        TweenService:Create(xyzScrollFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CanvasPosition = Vector2.new(0, lastScrollPos)}):Play()
     end
 end)
 
-closeBtn.MouseButton1Click:Connect(function()
-    frame:Destroy()
+closeButton.MouseButton1Click:Connect(function()
+    mainFrame:Destroy()
 end)
 
 RunService.RenderStepped:Connect(function()
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         local pos = hrp.Position
-        xyzrtLabel.Text = string.format("X:%.2f | Y:%.2f | Z:%.2f", pos.X, pos.Y, pos.Z)
+        xyzLabel.Text = string.format("X:%.2f | Y:%.2f | Z:%.2f", pos.X, pos.Y, pos.Z)
     else
-        xyzrtLabel.Text = "X:- | Y:- | Z:-"
+        xyzLabel.Text = "X:- | Y:- | Z:-"
     end
 end)
