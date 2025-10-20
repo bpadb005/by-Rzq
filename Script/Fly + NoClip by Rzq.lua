@@ -93,7 +93,7 @@ local function getRootPart()
     return getCharacter():FindFirstChild("HumanoidRootPart")
 end
 
-local function enableNoclip()
+local function enableNoClip()
     for _, part in ipairs(getCharacter():GetDescendants()) do
         if part:IsA("BasePart") then
             part.CanCollide = false
@@ -156,7 +156,7 @@ local function startFly()
         local smoothedLook = lastLookDirection:Lerp(camera.CFrame.LookVector, math.clamp(dt * rotationSmoothness, 0, 1))
         lastLookDirection = smoothedLook
         bodyGyro.CFrame = CFrame.lookAt(root.Position, root.Position + smoothedLook)
-        enableNoclip()
+        enableNoClip()
     end)
 end
 
