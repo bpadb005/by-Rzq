@@ -1,92 +1,112 @@
-local player = game.Players.LocalPlayer
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
 
-local gui = Instance.new("ScreenGui")
-gui.Parent = player:WaitForChild("PlayerGui")
-gui.ResetOnSpawn = false
+local localPlayer = Players.LocalPlayer
+local camera = Workspace.CurrentCamera
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 240, 0, 220)
-frame.Position = UDim2.new(0.5, -120, 0.5, -150)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.ClipsDescendants = true
-frame.Parent = gui
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+local mainGui = Instance.new("ScreenGui")
+mainGui.Name = "Teleport|Spectate"
+mainGui.ResetOnSpawn = false
+mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 28)
-title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-title.TextColor3 = Color3.fromRGB(230, 230, 230)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 14
-title.Text = "Teleport & Spectate\nby Rzq"
-title.BorderSizePixel = 0
-title.Parent = frame
-Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 240, 0, 220)
+mainFrame.Position = UDim2.new(0.5, -120, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = mainGui
 
-local function createHeaderButton(text, pos, color)
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0, 18, 0, 18)
-	btn.Position = pos
-	btn.BackgroundColor3 = color
-	btn.TextColor3 = Color3.fromRGB(230, 230, 230)
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 16
-	btn.BorderSizePixel = 0
-	btn.AutoButtonColor = false
-	btn.Text = text
-	btn.Parent = frame
-	Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 5)
-	return btn
+local mainFrameCorner = Instance.new("UICorner")
+mainFrameCorner.CornerRadius = UDim.new(0, 10)
+mainFrameCorner.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 28)
+titleLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+titleLabel.TextColor3 = Color3.fromRGB(230, 230, 230)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 14
+titleLabel.BorderSizePixel = 0
+titleLabel.Text = "Teleport | Spectate\nby Rzq"
+titleLabel.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 10)
+titleCorner.Parent = titleLabel
+
+local function createHeaderButton(text, position, color)
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(0, 18, 0, 18)
+	button.Position = position
+	button.BackgroundColor3 = color
+	button.TextColor3 = Color3.fromRGB(230, 230, 230)
+	button.Font = Enum.Font.GothamBold
+	button.TextSize = 16
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = false
+	button.Text = text
+	button.Parent = mainFrame
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 5)
+	corner.Parent = button
+
+	return button
 end
 
-local minimizeBtn = createHeaderButton("-", UDim2.new(0, 6, 0, 5), Color3.fromRGB(60, 60, 60))
-local closeBtn = createHeaderButton("×", UDim2.new(1, -26, 0, 5), Color3.fromRGB(90, 40, 40))
+local minimizeButton = createHeaderButton("-", UDim2.new(0, 6, 0, 5), Color3.fromRGB(60, 60, 60))
+local closeButton = createHeaderButton("×", UDim2.new(1, -26, 0, 5), Color3.fromRGB(90, 40, 40))
 
-local function hoverEffect(btn, normal, hover)
-	btn.MouseEnter:Connect(function()
-		btn.BackgroundColor3 = hover
+local function hoverEffect(button, normalColor, hoverColor)
+	button.MouseEnter:Connect(function()
+		button.BackgroundColor3 = hoverColor
 	end)
-	btn.MouseLeave:Connect(function()
-		btn.BackgroundColor3 = normal
+	button.MouseLeave:Connect(function()
+		button.BackgroundColor3 = normalColor
 	end)
 end
 
-hoverEffect(minimizeBtn, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
-hoverEffect(closeBtn, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50))
+hoverEffect(minimizeButton, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
+hoverEffect(closeButton, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50))
 
-local contentMask = Instance.new("Frame")
-contentMask.Size = UDim2.new(1, 0, 1, -32)
-contentMask.Position = UDim2.new(0, 0, 0, 32)
-contentMask.BackgroundTransparency = 1
-contentMask.ClipsDescendants = true
-contentMask.Parent = frame
+local isMinimized = false
+local originalSize = mainFrame.Size
+
+local contentMaskFrame = Instance.new("Frame")
+contentMaskFrame.Name = "ContentMaskFrame"
+contentMaskFrame.Size = UDim2.new(1, 0, 1, -32)
+contentMaskFrame.Position = UDim2.new(0, 0, 0, 32)
+contentMaskFrame.BackgroundTransparency = 1
+contentMaskFrame.ClipsDescendants = true
+contentMaskFrame.Parent = mainFrame
 
 local contentContainer = Instance.new("Frame")
+contentContainer.Name = "ContentContainer"
 contentContainer.Size = UDim2.new(1, 0, 1, 0)
 contentContainer.BackgroundTransparency = 1
-contentContainer.Parent = contentMask
+contentContainer.Parent = contentMaskFrame
 
-local minimized = false
-local originalSize = frame.Size
-minimizeBtn.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	local targetSize = minimized and UDim2.new(0, 240, 0, 32) or originalSize
-	local maskTarget = minimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -32)
-	TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = targetSize}):Play()
-	TweenService:Create(contentMask, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = maskTarget}):Play()
+minimizeButton.MouseButton1Click:Connect(function()
+	isMinimized = not isMinimized
+	local frameTarget = isMinimized and UDim2.new(0, 240, 0, 32) or originalSize
+	local maskTarget = isMinimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -32)
+	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = frameTarget}):Play()
+	TweenService:Create(contentMaskFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = maskTarget}):Play()
 end)
 
-closeBtn.MouseButton1Click:Connect(function()
-	frame:Destroy()
+closeButton.MouseButton1Click:Connect(function()
+	mainFrame:Destroy()
 end)
 
 local listContainer = Instance.new("ScrollingFrame")
+listContainer.Name = "PlayerList"
 listContainer.Size = UDim2.new(0, 210, 0, 112)
 listContainer.Position = UDim2.new(0.5, -105, 0, 2)
 listContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -96,7 +116,10 @@ listContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
 listContainer.ScrollingDirection = Enum.ScrollingDirection.Y
 listContainer.ZIndex = 3
 listContainer.Parent = contentContainer
-Instance.new("UICorner", listContainer).CornerRadius = UDim.new(0, 6)
+
+local listCorner = Instance.new("UICorner")
+listCorner.CornerRadius = UDim.new(0, 6)
+listCorner.Parent = listContainer
 
 local stroke = Instance.new("UIStroke")
 stroke.Thickness = 1
@@ -108,13 +131,12 @@ listLayout.Padding = UDim.new(0, 3)
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
 listLayout.Parent = listContainer
 
-local padding = Instance.new("UIPadding")
-padding.PaddingLeft = UDim.new(0, 4)
-padding.PaddingTop = UDim.new(0, 4)
-padding.Parent = listContainer
+local listPadding = Instance.new("UIPadding")
+listPadding.PaddingLeft = UDim.new(0, 4)
+listPadding.PaddingTop = UDim.new(0, 4)
+listPadding.Parent = listContainer
 
-local selectedPlayer = nil
-local selectedButton = nil
+local selectedPlayer, selectedButton = nil, nil
 
 local function updateCanvas()
 	task.wait()
@@ -124,14 +146,18 @@ end
 listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
 
 local function refreshList()
-	for _, c in ipairs(listContainer:GetChildren()) do
-		if c:IsA("TextButton") then
-			c:Destroy()
+	local selectedName = selectedPlayer and selectedPlayer.Name or nil
+
+	for _, child in ipairs(listContainer:GetChildren()) do
+		if child:IsA("TextButton") then
+			child:Destroy()
 		end
 	end
+
 	for _, plr in ipairs(Players:GetPlayers()) do
-		if plr ~= player then
+		if plr ~= localPlayer then
 			local option = Instance.new("TextButton")
+			option.Name = plr.Name
 			option.Size = UDim2.new(1, -8, 0, 24)
 			option.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 			option.TextColor3 = Color3.fromRGB(220, 220, 220)
@@ -142,13 +168,17 @@ local function refreshList()
 			option.AutoButtonColor = false
 			option.ZIndex = 4
 			option.Parent = listContainer
-			Instance.new("UICorner", option).CornerRadius = UDim.new(0, 5)
+
+			local optionCorner = Instance.new("UICorner")
+			optionCorner.CornerRadius = UDim.new(0, 5)
+			optionCorner.Parent = option
 
 			option.MouseEnter:Connect(function()
 				if option ~= selectedButton then
 					TweenService:Create(option, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
 				end
 			end)
+
 			option.MouseLeave:Connect(function()
 				if option ~= selectedButton then
 					TweenService:Create(option, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
@@ -163,13 +193,19 @@ local function refreshList()
 				selectedButton = option
 				TweenService:Create(option, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(90, 90, 90)}):Play()
 			end)
+
+			if plr.Name == selectedName then
+				selectedPlayer, selectedButton, option.BackgroundColor3 = plr, option, Color3.fromRGB(90, 90, 90)
+			end
 		end
 	end
+
 	updateCanvas()
 end
 
 refreshList()
 
+Players.PlayerAdded:Connect(refreshList)
 Players.PlayerRemoving:Connect(function(leaving)
 	if selectedPlayer == leaving then
 		selectedPlayer = nil
@@ -181,24 +217,28 @@ Players.PlayerRemoving:Connect(function(leaving)
 	refreshList()
 end)
 
-Players.PlayerAdded:Connect(refreshList)
+local teleportButton = Instance.new("TextButton")
+teleportButton.Name = "TeleportButton"
+teleportButton.Size = UDim2.new(0, 210, 0, 28)
+teleportButton.Position = UDim2.new(0.5, -105, 0, 120)
+teleportButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+teleportButton.TextColor3 = Color3.fromRGB(230, 230, 230)
+teleportButton.Font = Enum.Font.GothamBold
+teleportButton.TextSize = 12
+teleportButton.Text = "Teleport"
+teleportButton.BorderSizePixel = 0
+teleportButton.Parent = contentContainer
 
-local tpButton = Instance.new("TextButton")
-tpButton.Size = UDim2.new(0, 210, 0, 28)
-tpButton.Position = UDim2.new(0.5, -105, 0, 120)
-tpButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-tpButton.TextColor3 = Color3.fromRGB(230, 230, 230)
-tpButton.Font = Enum.Font.GothamBold
-tpButton.TextSize = 12
-tpButton.Text = "Teleport"
-tpButton.Parent = contentContainer
-Instance.new("UICorner", tpButton).CornerRadius = UDim.new(0, 6)
-hoverEffect(tpButton, Color3.fromRGB(45, 45, 45), Color3.fromRGB(70, 70, 70))
+local teleportCorner = Instance.new("UICorner")
+teleportCorner.CornerRadius = UDim.new(0, 6)
+teleportCorner.Parent = teleportButton
 
-tpButton.MouseButton1Click:Connect(function()
+hoverEffect(teleportButton, Color3.fromRGB(45, 45, 45), Color3.fromRGB(70, 70, 70))
+
+teleportButton.MouseButton1Click:Connect(function()
 	if selectedPlayer and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local target = selectedPlayer.Character.HumanoidRootPart
-		local char = player.Character or player.CharacterAdded:Wait()
+		local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 		if char:FindFirstChild("HumanoidRootPart") then
 			char:MoveTo(target.Position + Vector3.new(0, 2, 0))
 		end
@@ -206,6 +246,7 @@ tpButton.MouseButton1Click:Connect(function()
 end)
 
 local spectateButton = Instance.new("TextButton")
+spectateButton.Name = "SpectateButton"
 spectateButton.Size = UDim2.new(0, 210, 0, 28)
 spectateButton.Position = UDim2.new(0.5, -105, 0, 152)
 spectateButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
@@ -213,37 +254,35 @@ spectateButton.TextColor3 = Color3.fromRGB(230, 230, 230)
 spectateButton.Font = Enum.Font.GothamBold
 spectateButton.TextSize = 12
 spectateButton.Text = "Spectate"
+spectateButton.BorderSizePixel = 0
 spectateButton.Parent = contentContainer
-Instance.new("UICorner", spectateButton).CornerRadius = UDim.new(0, 6)
+
+local spectateCorner = Instance.new("UICorner")
+spectateCorner.CornerRadius = UDim.new(0, 6)
+spectateCorner.Parent = spectateButton
+
 hoverEffect(spectateButton, Color3.fromRGB(45, 45, 45), Color3.fromRGB(70, 70, 70))
 
-local camera = workspace.CurrentCamera
-local spectating = false
-local connection = nil
+local isSpectating = false
+local spectateConnection
 
 spectateButton.MouseButton1Click:Connect(function()
-	if not selectedPlayer or not selectedPlayer.Character then
-		return
-	end
-	if spectating then
-		spectating = false
+	if not selectedPlayer or not selectedPlayer.Character then return end
+	if isSpectating then
+		isSpectating = false
 		spectateButton.Text = "Spectate"
-		if connection then
-			connection:Disconnect()
-		end
-		camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
+		if spectateConnection then spectateConnection:Disconnect() end
+		camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
 		camera.CameraType = Enum.CameraType.Custom
 	else
-		spectating = true
+		isSpectating = true
 		spectateButton.Text = "Stop Spectate"
-		connection = RunService.RenderStepped:Connect(function()
+		spectateConnection = RunService.RenderStepped:Connect(function()
 			if not selectedPlayer or not selectedPlayer.Character or not selectedPlayer.Character:FindFirstChild("Humanoid") then
-				spectating = false
+				isSpectating = false
 				spectateButton.Text = "Spectate"
-				camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
-				if connection then
-					connection:Disconnect()
-				end
+				camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+				if spectateConnection then spectateConnection:Disconnect() end
 				return
 			end
 			camera.CameraSubject = selectedPlayer.Character:FindFirstChild("Humanoid")
@@ -254,16 +293,12 @@ end)
 Players.PlayerRemoving:Connect(function(leaving)
 	if selectedPlayer == leaving then
 		selectedPlayer = nil
-		if spectating then
-			spectating = false
+		if isSpectating then
+			isSpectating = false
 			spectateButton.Text = "Spectate"
-			if connection then
-				connection:Disconnect()
-			end
-			camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
+			if spectateConnection then spectateConnection:Disconnect() end
+			camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
 		end
 	end
 	refreshList()
 end)
-
-Players.PlayerAdded:Connect(refreshList)
