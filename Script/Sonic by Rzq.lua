@@ -1,9 +1,9 @@
 local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
@@ -263,13 +263,14 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 50, 0, 25)
-button.Position = UDim2.new(0.5, -25, 0.94, 0)
+button.Position = UDim2.new(1, -50, 0.5, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.Text = "Sonic\nby Rzq"
 button.Font = Enum.Font.SourceSansBold
 button.TextScaled = true
 button.AutoButtonColor = false
+button.Draggable = true
 button.Parent = gui
 
 local corner = Instance.new("UICorner")
