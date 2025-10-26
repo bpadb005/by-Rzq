@@ -204,7 +204,7 @@ end)
 restoreButton.MouseButton1Click:Connect(function()
     if not backupAvatarDesc then
         statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-        statusLabel.Text = "Avatar asli belum tersimpan!"
+        statusLabel.Text = "Avatar asli belum tersimpan."
         return
     end
     statusLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
@@ -214,7 +214,7 @@ restoreButton.MouseButton1Click:Connect(function()
             localPlayer.Character.Humanoid:ApplyDescriptionClientServer(backupAvatarDesc)
         end)
         statusLabel.TextColor3 = success and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100)
-        statusLabel.Text = success and "Avatar asli berhasil dikembalikan!" or "Gagal mengembalikan avatar asli."
+        statusLabel.Text = success and "Avatar asli berhasil dikembalikan." or "Gagal mengembalikan avatar asli."
     end)
 end)
 
