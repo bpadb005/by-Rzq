@@ -16,22 +16,22 @@ localPlayer.CharacterAdded:Connect(backupAvatar)
 
 local function loadAvatar(username)
     if not username or username == "" then
-        return false, "Username tidak boleh kosong!"
+        return false, "Username tidak boleh kosong."
     end
 
     local userId = (pcall(Players.GetUserIdFromNameAsync, Players, username) and Players:GetUserIdFromNameAsync(username))
     if not userId then
-        return false, "Username tidak ditemukan: " .. username
+        return false, "Username " .. username .. " tidak ditemukan."
     end
 
     local character = localPlayer.Character
     if not character then
-        return false, "Character tidak ada!"
+        return false, "Character tidak ada."
     end
 
     local humanoidDesc = (pcall(Players.GetHumanoidDescriptionFromUserId, Players, userId) and Players:GetHumanoidDescriptionFromUserId(userId))
     if not humanoidDesc then
-        return false, "Gagal mendapatkan avatar"
+        return false, "Gagal mendapatkan avatar dari " .. username
     end
 
     for _, item in pairs(character:GetChildren()) do
@@ -45,7 +45,7 @@ local function loadAvatar(username)
         character.Humanoid:ApplyDescriptionClientServer(humanoidDesc)
         task.wait(0.5)
     end) then
-        return false, "Gagal mengubah avatar"
+        return false, "Avatar gagal diubah ke: " .. username
     end
 
     return true, "Avatar berhasil diubah ke: " .. username
@@ -182,7 +182,7 @@ hoverEffect(restoreButton, Color3.fromRGB(50, 50, 50), Color3.fromRGB(70, 70, 70
 
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Size = UDim2.new(1, -30, 0, 50)
-statusLabel.Position = UDim2.new(0, 15, 0, 120)
+statusLabel.Position = UDim2.new(0, 15, 0, 118)
 statusLabel.BackgroundTransparency = 1
 statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 statusLabel.Font = Enum.Font.Gotham
