@@ -1,19 +1,13 @@
---// === Dark Minimalist UI ===
---// Dibuat agar mudah dibaca dan digunakan ulang untuk GUI apapun
-
---// === Services ===
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 
-local localPlayer = Players.LocalPlayer
+local player = Players.LocalPlayer
 
---// === ScreenGui Utama ===
 local mainGui = Instance.new("ScreenGui")
 mainGui.Name = "DarkMinimalistUI"
 mainGui.ResetOnSpawn = false
-mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
---// === Frame Utama ===
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 290, 0, 340)
@@ -29,7 +23,6 @@ local mainFrameCorner = Instance.new("UICorner")
 mainFrameCorner.CornerRadius = UDim.new(0, 12)
 mainFrameCorner.Parent = mainFrame
 
---// === Header / Title Bar ===
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Size = UDim2.new(1, 0, 0, 35)
@@ -45,7 +38,6 @@ local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 12)
 titleCorner.Parent = titleLabel
 
---// === Fungsi untuk Membuat Tombol Header ===
 local function createHeaderButton(buttonText, buttonPosition, buttonColor)
     local headerButton = Instance.new("TextButton")
     headerButton.Size = UDim2.new(0, 22, 0, 22)
@@ -66,16 +58,13 @@ local function createHeaderButton(buttonText, buttonPosition, buttonColor)
     return headerButton
 end
 
---// === Tombol Minimize dan Close ===
 local minimizeButton = createHeaderButton("-", UDim2.new(0, 8, 0, 7), Color3.fromRGB(60, 60, 60))
 local closeButton = createHeaderButton("×", UDim2.new(1, -30, 0, 7), Color3.fromRGB(90, 40, 40))
 
---// === Efek Hover Tombol ===
 local function hoverEffect(targetButton, normalColor, hoverColor)
     targetButton.MouseEnter:Connect(function()
         targetButton.BackgroundColor3 = hoverColor
     end)
-
     targetButton.MouseLeave:Connect(function()
         targetButton.BackgroundColor3 = normalColor
     end)
@@ -84,7 +73,6 @@ end
 hoverEffect(minimizeButton, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
 hoverEffect(closeButton, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50))
 
---// === Kontainer Konten ===
 local contentMaskFrame = Instance.new("Frame")
 contentMaskFrame.Name = "ContentMaskFrame"
 contentMaskFrame.Size = UDim2.new(1, 0, 1, -40)
@@ -99,7 +87,6 @@ contentContainerFrame.Size = UDim2.new(1, 0, 1, 0)
 contentContainerFrame.BackgroundTransparency = 1
 contentContainerFrame.Parent = contentMaskFrame
 
---// === Animasi Minimize / Expand ===
 local isMinimized = false
 local originalFrameSize = mainFrame.Size
 
@@ -134,7 +121,6 @@ closeButton.MouseButton1Click:Connect(function()
     mainFrame:Destroy()
 end)
 
---// === Contoh Isi (Bisa Dihapus Jika Tidak Diperlukan) ===
 local contentLabel = Instance.new("TextLabel")
 contentLabel.Name = "ContentLabel"
 contentLabel.Size = UDim2.new(1, -20, 1, -50)
