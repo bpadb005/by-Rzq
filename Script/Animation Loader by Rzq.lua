@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 
-local localPlayer = Players.LocalPlayer
+local player = Players.LocalPlayer
 
 local backupAnimationDesc
 local function backupAnimation(character)
@@ -23,10 +23,10 @@ local function backupAnimation(character)
     end)
 end
 
-if localPlayer.Character then
-    backupAnimation(localPlayer.Character)
+if player.Character then
+    backupAnimation(player.Character)
 end
-localPlayer.CharacterAdded:Connect(backupAnimation)
+player.CharacterAdded:Connect(backupAnimation)
 
 local function loadAnimation(username)
     if not username or username == "" then
@@ -38,7 +38,7 @@ local function loadAnimation(username)
         return false, "Username " .. username .. " tidak ditemukan."
     end
 
-    local character = localPlayer.Character
+    local character = player.Character
     if not character then
         return false, "Character tidak ada."
     end
@@ -81,7 +81,7 @@ end
 local mainGui = Instance.new("ScreenGui")
 mainGui.Name = "AnimationLoader"
 mainGui.ResetOnSpawn = false
-mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
@@ -136,12 +136,12 @@ end
 local minimizeButton = createHeaderButton("-", UDim2.new(0, 5, 0, 5), Color3.fromRGB(60, 60, 60))
 local closeButton = createHeaderButton("×", UDim2.new(1, -25, 0, 5), Color3.fromRGB(90, 40, 40))
 
-local function hoverEffect(targetButton, normalColor, hoverColor)
-    targetButton.MouseEnter:Connect(function()
-        targetButton.BackgroundColor3 = hoverColor
+local function hoverEffect(hoverTarget, normalColor, hoverColor)
+    hoverTarget.MouseEnter:Connect(function()
+        hoverTarget.BackgroundColor3 = hoverColor
     end)
-    targetButton.MouseLeave:Connect(function()
-        targetButton.BackgroundColor3 = normalColor
+    hoverTarget.MouseLeave:Connect(function()
+        hoverTarget.BackgroundColor3 = normalColor
     end)
 end
 
@@ -240,7 +240,7 @@ restoreButton.MouseButton1Click:Connect(function()
 
     task.spawn(function()
         local success = pcall(function()
-            local humanoid = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+            local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
             if humanoid then
                 local currentDesc = humanoid:GetAppliedDescription()
                 currentDesc.WalkAnimation = backupAnimationDesc.WalkAnimation
