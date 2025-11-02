@@ -2,12 +2,12 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-local localPlayer = Players.LocalPlayer
+local player = Players.LocalPlayer
 
 local mainGui = Instance.new("ScreenGui")
 mainGui.Name = "XYZ"
 mainGui.ResetOnSpawn = false
-mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
@@ -229,7 +229,7 @@ local function updateXYZList()
         teleportButtonCorner.Parent = teleportButton
 
         teleportButton.MouseButton1Click:Connect(function()
-            local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
                 hrp.CFrame = CFrame.new(pos)
             end
@@ -260,7 +260,7 @@ end
 local saveButton = createButton("Simpan", Color3.fromRGB(50,170,90))
 saveButton.Parent = buttonContainerFrame
 saveButton.MouseButton1Click:Connect(function()
-    local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         table.insert(savedXYZ, hrp.Position)
         updateXYZList()
@@ -315,7 +315,7 @@ closeButton.MouseButton1Click:Connect(function()
 end)
 
 RunService.RenderStepped:Connect(function()
-    local hrp = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         local pos = hrp.Position
         xyzLabel.Text = string.format("X:%.2f | Y:%.2f | Z:%.2f", pos.X, pos.Y, pos.Z)
