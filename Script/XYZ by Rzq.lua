@@ -62,12 +62,12 @@ end
 local minimizeButton = createHeaderButton("-", UDim2.new(0, 8, 0, 7), Color3.fromRGB(60, 60, 60))
 local closeButton = createHeaderButton("×", UDim2.new(1, -30, 0, 7), Color3.fromRGB(90, 40, 40))
 
-local function hoverEffect(targetButton, normalColor, hoverColor)
-    targetButton.MouseEnter:Connect(function()
-        targetButton.BackgroundColor3 = hoverColor
+local function hoverEffect(hoverTarget, normalColor, hoverColor)
+    hoverTarget.MouseEnter:Connect(function()
+        hoverTarget.BackgroundColor3 = hoverColor
     end)
-    targetButton.MouseLeave:Connect(function()
-        targetButton.BackgroundColor3 = normalColor
+    hoverTarget.MouseLeave:Connect(function()
+        hoverTarget.BackgroundColor3 = normalColor
     end)
 end
 
