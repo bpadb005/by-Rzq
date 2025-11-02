@@ -3,13 +3,13 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
-local localPlayer = Players.LocalPlayer
+local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
 
 local mainGui = Instance.new("ScreenGui")
 mainGui.Name = "Teleport|Spectate"
 mainGui.ResetOnSpawn = false
-mainGui.Parent = localPlayer:WaitForChild("PlayerGui")
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
@@ -41,36 +41,36 @@ local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 10)
 titleCorner.Parent = titleLabel
 
-local function createHeaderButton(text, position, color)
-	local button = Instance.new("TextButton")
-	button.Size = UDim2.new(0, 18, 0, 18)
-	button.Position = position
-	button.BackgroundColor3 = color
-	button.TextColor3 = Color3.fromRGB(230, 230, 230)
-	button.Font = Enum.Font.GothamBold
-	button.TextSize = 16
-	button.BorderSizePixel = 0
-	button.AutoButtonColor = false
-	button.Text = text
-	button.Parent = mainFrame
+local function createHeaderButton(buttonText, buttonPosition, buttonColor)
+    local headerButton = Instance.new("TextButton")
+    headerButton.Size = UDim2.new(0, 18, 0, 18)
+    headerButton.Position = buttonPosition
+    headerButton.BackgroundColor3 = buttonColor
+    headerButton.TextColor3 = Color3.fromRGB(230, 230, 230)
+    headerButton.Font = Enum.Font.GothamBold
+    headerButton.TextSize = 16
+    headerButton.BorderSizePixel = 0
+    headerButton.AutoButtonColor = false
+    headerButton.Text = buttonText
+    headerButton.Parent = mainFrame
 
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 5)
-	corner.Parent = button
+    local headerButtonCorner = Instance.new("UICorner")
+    headerButtonCorner.CornerRadius = UDim.new(0, 5)
+    headerButtonCorner.Parent = headerButton
 
-	return button
+    return headerButton
 end
 
 local minimizeButton = createHeaderButton("-", UDim2.new(0, 6, 0, 5), Color3.fromRGB(60, 60, 60))
 local closeButton = createHeaderButton("×", UDim2.new(1, -26, 0, 5), Color3.fromRGB(90, 40, 40))
 
-local function hoverEffect(button, normalColor, hoverColor)
-	button.MouseEnter:Connect(function()
-		button.BackgroundColor3 = hoverColor
-	end)
-	button.MouseLeave:Connect(function()
-		button.BackgroundColor3 = normalColor
-	end)
+local function hoverEffect(targetButton, normalColor, hoverColor)
+    targetButton.MouseEnter:Connect(function()
+        targetButton.BackgroundColor3 = hoverColor
+    end)
+    targetButton.MouseLeave:Connect(function()
+        targetButton.BackgroundColor3 = normalColor
+    end)
 end
 
 hoverEffect(minimizeButton, Color3.fromRGB(60, 60, 60), Color3.fromRGB(80, 80, 80))
@@ -155,7 +155,7 @@ local function refreshList()
 	end
 
 	for _, plr in ipairs(Players:GetPlayers()) do
-		if plr ~= localPlayer then
+		if plr ~= player then
 			local option = Instance.new("TextButton")
 			option.Name = plr.Name
 			option.Size = UDim2.new(1, -8, 0, 24)
@@ -238,7 +238,7 @@ hoverEffect(teleportButton, Color3.fromRGB(45, 45, 45), Color3.fromRGB(70, 70, 7
 teleportButton.MouseButton1Click:Connect(function()
 	if selectedPlayer and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local target = selectedPlayer.Character.HumanoidRootPart
-		local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+		local char = player.Character or player.CharacterAdded:Wait()
 		if char:FindFirstChild("HumanoidRootPart") then
 			char:MoveTo(target.Position + Vector3.new(0, 2, 0))
 		end
@@ -272,7 +272,7 @@ spectateButton.MouseButton1Click:Connect(function()
 		isSpectating = false
 		spectateButton.Text = "Spectate"
 		if spectateConnection then spectateConnection:Disconnect() end
-		camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+		camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
 		camera.CameraType = Enum.CameraType.Custom
 	else
 		isSpectating = true
@@ -281,7 +281,7 @@ spectateButton.MouseButton1Click:Connect(function()
 			if not selectedPlayer or not selectedPlayer.Character or not selectedPlayer.Character:FindFirstChild("Humanoid") then
 				isSpectating = false
 				spectateButton.Text = "Spectate"
-				camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+				camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
 				if spectateConnection then spectateConnection:Disconnect() end
 				return
 			end
@@ -297,7 +297,7 @@ Players.PlayerRemoving:Connect(function(leaving)
 			isSpectating = false
 			spectateButton.Text = "Spectate"
 			if spectateConnection then spectateConnection:Disconnect() end
-			camera.CameraSubject = localPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+			camera.CameraSubject = player.Character:FindFirstChildWhichIsA("Humanoid")
 		end
 	end
 	refreshList()
