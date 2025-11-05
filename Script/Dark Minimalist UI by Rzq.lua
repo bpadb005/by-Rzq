@@ -87,40 +87,6 @@ contentContainerFrame.Size = UDim2.new(1, 0, 1, 0)
 contentContainerFrame.BackgroundTransparency = 1
 contentContainerFrame.Parent = contentMaskFrame
 
-local isMinimized = false
-local originalFrameSize = mainFrame.Size
-
-minimizeButton.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-
-    local targetFrameSize
-    local targetMaskSize
-
-    if isMinimized then
-        targetFrameSize = UDim2.new(0, 290, 0, 40)
-        targetMaskSize = UDim2.new(1, 0, 0, 0)
-    else
-        targetFrameSize = originalFrameSize
-        targetMaskSize = UDim2.new(1, 0, 1, -40)
-    end
-
-    TweenService:Create(
-        mainFrame,
-        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        { Size = targetFrameSize }
-    ):Play()
-
-    TweenService:Create(
-        contentMaskFrame,
-        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        { Size = targetMaskSize }
-    ):Play()
-end)
-
-closeButton.MouseButton1Click:Connect(function()
-    mainFrame:Destroy()
-end)
-
 local contentLabel = Instance.new("TextLabel")
 contentLabel.Name = "ContentLabel"
 contentLabel.Size = UDim2.new(1, -20, 1, -50)
@@ -132,3 +98,38 @@ contentLabel.Font = Enum.Font.Gotham
 contentLabel.TextSize = 14
 contentLabel.TextWrapped = true
 contentLabel.Parent = contentContainerFrame
+
+local isMinimized = false
+local originalMainFrameSize = mainFrame.Size
+local originalContentMaskFrameSize = contentMaskFrame.Size
+
+minimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+
+    local tweenMainFrameSize
+    local tweenContentMaskFrameSize
+
+    if isMinimized then
+        tweenMainFrameSize = UDim2.new(0, 290, 0, 40)
+        tweenContentMaskFrameSize = UDim2.new(1, 0, 0, 0)
+    else
+        tweenMainFrameSize = originalMainFrameSize
+        tweenContentMaskFrameSize = originalContentMaskFrameSize
+    end
+
+    TweenService:Create(
+        mainFrame,
+        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        { Size = tweenMainFrameSize }
+    ):Play()
+
+    TweenService:Create(
+        contentMaskFrame,
+        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        { Size = tweenContentMaskFrameSize }
+    ):Play()
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    mainFrame:Destroy()
+end)
