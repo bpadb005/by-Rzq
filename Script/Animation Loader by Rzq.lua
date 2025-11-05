@@ -266,17 +266,34 @@ restoreButton.MouseButton1Click:Connect(function()
 end)
 
 local isMinimized = false
-local originalFrameSize = mainFrame.Size
-local originalMaskSize = contentMaskFrame.Size
+local originalMainFrameSize = mainFrame.Size
+local originalContentMaskFrameSize = contentMaskFrame.Size
 
 minimizeButton.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
 
-    local targetFrameSize = isMinimized and UDim2.new(0, 220, 0, 30) or originalFrameSize
-    local targetMaskSize = isMinimized and UDim2.new(1, 0, 0, 0) or originalMaskSize
+    local tweenMainFrameSize
+    local tweenContentMaskFrameSize
 
-    TweenService:Create(mainFrame, TweenInfo.new(0.35), { Size = targetFrameSize }):Play()
-    TweenService:Create(contentMaskFrame, TweenInfo.new(0.35), { Size = targetMaskSize }):Play()
+    if isMinimized then
+        tweenMainFrameSize = UDim2.new(0, 220, 0, 30)
+        tweenContentMaskFrameSize = UDim2.new(1, 0, 0, 0)
+    else
+        tweenMainFrameSize = originalMainFrameSize
+        tweenContentMaskFrameSize = originalContentMaskFrameSize
+    end
+
+    TweenService:Create(
+        mainFrame,
+        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        { Size = tweenMainFrameSize }
+    ):Play()
+
+    TweenService:Create(
+        contentMaskFrame,
+        TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        { Size = tweenContentMaskFrameSize }
+    ):Play()
 
     statusLabel.Visible = not isMinimized
 end)
