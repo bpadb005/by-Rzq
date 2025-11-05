@@ -1,45 +1,30 @@
---//====================================================
---// Invisibility Toggle Script by BpadBOOS
---// Tekan tombol yang ditentukan untuk toggle invisible
---//====================================================
+local Keybind = "E"
+local Transparency = true
 
---// CONFIGURASI
-local Keybind = "E"              -- Tombol toggle
-local Transparency = true        -- Buat fake character semi-transparan
-
---// SERVICES
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
---// VARIABEL UTAMA
 local player = Players.LocalPlayer
 local realCharacter = player.Character or player.CharacterAdded:Wait()
-local fakeCharacter
-local anchorPart
 local isInvisible = false
 local canInvis = true
+local fakeCharacter
+local anchorPart
 local pseudoAnchor
+local storedPosition
 
---//====================================================
---// FUNGSI: Setup Fake Character
---//====================================================
 local function createFakeCharacter()
 	realCharacter.Archivable = true
 	local clone = realCharacter:Clone()
-
-	-- Platform tersembunyi (tempat fake character)
 	local part = Instance.new("Part")
 	part.Anchored = true
 	part.Size = Vector3.new(200, 1, 200)
 	part.CFrame = CFrame.new(0, -500, 0)
 	part.CanCollide = true
 	part.Parent = workspace
-
 	clone.Parent = workspace
 	clone:MoveTo(part.Position + Vector3.new(0, 5, 0))
-
-	-- Nonaktifkan LocalScript & atur transparansi
 	for _, v in pairs(realCharacter:GetChildren()) do
 		if v:IsA("LocalScript") then
 			local s = v:Clone()
@@ -47,7 +32,6 @@ local function createFakeCharacter()
 			s.Parent = clone
 		end
 	end
-
 	if Transparency then
 		for _, v in pairs(clone:GetDescendants()) do
 			if v:IsA("BasePart") then
@@ -63,75 +47,79 @@ local function createFakeCharacter()
 			end
 		end
 	end
-
 	fakeCharacter = clone
 	anchorPart = part
 	pseudoAnchor = fakeCharacter:WaitForChild("HumanoidRootPart")
 end
 
---//====================================================
---// FUNGSI: Reset / Handle Respawn
---//====================================================
 local function onCharacterRespawn()
 	canInvis = false
 	realCharacter = player.Character or player.CharacterAdded:Wait()
 	canInvis = true
 	isInvisible = false
-
 	if fakeCharacter then fakeCharacter:Destroy() end
 	if anchorPart then anchorPart:Destroy() end
-
 	createFakeCharacter()
-
-	workspace.CurrentCamera.CameraSubject = realCharacter:WaitForChild("Humanoid")
 end
 
---//====================================================
---// FUNGSI: Toggle Invisibility
---//====================================================
 local function toggleInvisibility()
 	if not isInvisible then
-		-- Masuk mode invisible
+		storedPosition = realCharacter:WaitForChild("HumanoidRootPart").CFrame
 		local storedCF = realCharacter.HumanoidRootPart.CFrame
 		realCharacter.HumanoidRootPart.CFrame = fakeCharacter.HumanoidRootPart.CFrame
 		fakeCharacter.HumanoidRootPart.CFrame = storedCF
-
 		realCharacter.Humanoid:UnequipTools()
 		player.Character = fakeCharacter
 		workspace.CurrentCamera.CameraSubject = fakeCharacter:WaitForChild("Humanoid")
-
 		pseudoAnchor = realCharacter.HumanoidRootPart
 		for _, v in pairs(fakeCharacter:GetChildren()) do
 			if v:IsA("LocalScript") then v.Disabled = false end
 		end
-
 		isInvisible = true
 	else
-		-- Kembali normal
 		local storedCF = fakeCharacter.HumanoidRootPart.CFrame
 		fakeCharacter.HumanoidRootPart.CFrame = realCharacter.HumanoidRootPart.CFrame
 		realCharacter.HumanoidRootPart.CFrame = storedCF
-
 		fakeCharacter.Humanoid:UnequipTools()
 		player.Character = realCharacter
 		workspace.CurrentCamera.CameraSubject = realCharacter:WaitForChild("Humanoid")
-
 		pseudoAnchor = fakeCharacter.HumanoidRootPart
 		for _, v in pairs(fakeCharacter:GetChildren()) do
 			if v:IsA("LocalScript") then v.Disabled = true end
 		end
-
 		isInvisible = false
 	end
 end
 
---//====================================================
---// KONEKSI: Input, Respawn, dan Death Handler
---//====================================================
+local function bindFakeDeath()
+	if not fakeCharacter then return end
+	local humanoid = fakeCharacter:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.Died:Connect(function()
+			if not storedPosition then
+				storedPosition = CFrame.new(0, 10, 0)
+			end
+			if player.Character ~= realCharacter then
+				player.Character = realCharacter
+				workspace.CurrentCamera.CameraSubject = realCharacter:WaitForChild("Humanoid")
+			end
+			if realCharacter:FindFirstChild("HumanoidRootPart") then
+				realCharacter.HumanoidRootPart.CFrame = storedPosition + Vector3.new(0, 3, 0)
+			end
+			if fakeCharacter then fakeCharacter:Destroy() end
+			if anchorPart then anchorPart:Destroy() end
+			isInvisible = false
+			canInvis = true
+			createFakeCharacter()
+			bindFakeDeath()
+		end)
+	end
+end
+
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
 	if input.KeyCode.Name:lower() == Keybind:lower() and canInvis then
-		if realCharacter:FindFirstChild("HumanoidRootPart") and fakeCharacter:FindFirstChild("HumanoidRootPart") then
+		if realCharacter:FindFirstChild("HumanoidRootPart") and fakeCharacter and fakeCharacter:FindFirstChild("HumanoidRootPart") then
 			toggleInvisibility()
 		end
 	end
@@ -144,12 +132,9 @@ RunService.RenderStepped:Connect(function()
 end)
 
 player.CharacterAppearanceLoaded:Connect(onCharacterRespawn)
-realCharacter.Humanoid.Died:Connect(function()
+realCharacter:WaitForChild("Humanoid").Died:Connect(function()
 	if fakeCharacter then fakeCharacter:Destroy() end
 end)
 
---//====================================================
---// MULAI SCRIPT
---//====================================================
 createFakeCharacter()
-print("[Invisibility Script] Siap digunakan! Tekan '" .. Keybind .. "' untuk toggle.")
+bindFakeDeath()
