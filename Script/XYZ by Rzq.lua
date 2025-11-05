@@ -118,6 +118,16 @@ local xyzLabelCorner = Instance.new("UICorner")
 xyzLabelCorner.CornerRadius = UDim.new(0, 6)
 xyzLabelCorner.Parent = xyzLabel
 
+RunService.RenderStepped:Connect(function()
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        local pos = hrp.Position
+        xyzLabel.Text = string.format("X:%.2f | Y:%.2f | Z:%.2f", pos.X, pos.Y, pos.Z)
+    else
+        xyzLabel.Text = "X:- | Y:- | Z:-"
+    end
+end)
+
 local function createButton(buttonText, buttonColor)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, -20, 0, 32)
@@ -291,35 +301,46 @@ end)
 updateXYZList()
 
 local isMinimized = false
+local originalMainFrameSize = mainFrame.Size
+local originalContentMaskFrameSize = contentMaskFrame.Size
 local lastScrollPos = 0
 
 minimizeButton.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    if isMinimized then
-        lastScrollPos = xyzScrollFrame.CanvasPosition.Y
-    end
+	isMinimized = not isMinimized
 
-    local frameTargetSize = isMinimized and UDim2.new(0, 290, 0, 40) or UDim2.new(0, 290, 0, 340)
-    local maskTargetSize = isMinimized and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 1, -40)
+	local tweenMainFrameSize
+	local tweenContentMaskFrameSize
 
-    TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = frameTargetSize}):Play()
-    TweenService:Create(contentMaskFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = maskTargetSize}):Play()
+	if isMinimized then
+		tweenMainFrameSize = UDim2.new(0, 290, 0, 40)
+		tweenContentMaskFrameSize = UDim2.new(1, 0, 0, 0)
+		lastScrollPos = xyzScrollFrame.CanvasPosition.Y
+	else
+		tweenMainFrameSize = originalMainFrameSize
+		tweenContentMaskFrameSize = originalContentMaskFrameSize
+	end
 
-    if not isMinimized then
-        TweenService:Create(xyzScrollFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CanvasPosition = Vector2.new(0, lastScrollPos)}):Play()
-    end
+	TweenService:Create(
+		mainFrame,
+		TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		{ Size = tweenMainFrameSize }
+	):Play()
+
+	TweenService:Create(
+		contentMaskFrame,
+		TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		{ Size = tweenContentMaskFrameSize }
+	):Play()
+
+	if not isMinimized then
+		TweenService:Create(
+			xyzScrollFrame,
+			TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{ CanvasPosition = Vector2.new(0, lastScrollPos) }
+		):Play()
+	end
 end)
 
 closeButton.MouseButton1Click:Connect(function()
     mainFrame:Destroy()
-end)
-
-RunService.RenderStepped:Connect(function()
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        local pos = hrp.Position
-        xyzLabel.Text = string.format("X:%.2f | Y:%.2f | Z:%.2f", pos.X, pos.Y, pos.Z)
-    else
-        xyzLabel.Text = "X:- | Y:- | Z:-"
-    end
 end)
