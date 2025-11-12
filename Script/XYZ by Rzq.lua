@@ -77,7 +77,7 @@ hoverEffect(closeButton, Color3.fromRGB(90, 40, 40), Color3.fromRGB(120, 50, 50)
 local contentMaskFrame = Instance.new("Frame")
 contentMaskFrame.Name = "ContentMaskFrame"
 contentMaskFrame.Size = UDim2.new(1, 0, 1, -40)
-contentMaskFrame.Position = UDim2.new(0, 0, 0, 40)
+contentMaskFrame.Position = UDim2.new(0, 0, 0, 42)
 contentMaskFrame.BackgroundTransparency = 1
 contentMaskFrame.ClipsDescendants = true
 contentMaskFrame.Parent = mainFrame
@@ -312,7 +312,7 @@ minimizeButton.MouseButton1Click:Connect(function()
 	local tweenContentMaskFrameSize
 
 	if isMinimized then
-		tweenMainFrameSize = UDim2.new(0, 290, 0, 40)
+		tweenMainFrameSize = UDim2.new(0, 290, 0, 35)
 		tweenContentMaskFrameSize = UDim2.new(1, 0, 0, 0)
 		lastScrollPos = xyzScrollFrame.CanvasPosition.Y
 	else
