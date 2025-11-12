@@ -110,7 +110,7 @@ minimizeButton.MouseButton1Click:Connect(function()
     local tweenContentMaskFrameSize
 
     if isMinimized then
-        tweenMainFrameSize = UDim2.new(0, 290, 0, 40)
+        tweenMainFrameSize = UDim2.new(0, 290, 0, 35)
         tweenContentMaskFrameSize = UDim2.new(1, 0, 0, 0)
     else
         tweenMainFrameSize = originalMainFrameSize
