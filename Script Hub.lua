@@ -170,7 +170,7 @@ createScriptItem("Rzq", "Rayfield Interface Suite", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Rayfield%20by%20Rzq.lua'))()
 end)
 
-createScriptItem("Fly", "Fly like Admin", function()
+createScriptItem("Fly", "Fly Like Admin", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Fly%20by%20Rzq.lua'))()
 end)
 
@@ -178,12 +178,20 @@ createScriptItem("Invisible", "Invisible Mode", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Invisible%20by%20Rzq.lua'))()
 end)
 
-createScriptItem("Avatar Loader", "Copy Avatar + Emote", function()
+createScriptItem("Avatar Loader", "Copy Avatar + Emote Player", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Avatar%20Loader%20by%20Rzq.lua'))()
 end)
 
-createScriptItem("Animation Loader", "Copy Animation + Emote", function()
+createScriptItem("Animation Loader", "Copy Animation + Emote Player", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Animation%20Loader%20by%20Rzq.lua'))()
+end)
+
+createScriptItem("XYZ", "Save Coordinates & Teleport", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/XYZ%20by%20Rzq.lua'))()
+end)
+
+createScriptItem("Teleport & Spectate", "Teleport & Spectate Player", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Teleport%20%26%20Spectate%20by%20Rzq.lua'))()
 end)
 
 createScriptItem("Sonic", "Sonic Mode", function()
