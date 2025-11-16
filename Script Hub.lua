@@ -198,6 +198,10 @@ createScriptItem("Sonic", "Sonic Mode", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Sonic%20by%20Rzq.lua'))()
 end)
 
+createScriptItem("F3X", "Building Tools by F3X", function()
+    loadstring(game:GetObjects("rbxassetid://6695644299")[1].Source)()
+end)
+
 local isMinimized = false
 local originalMainFrameSize = mainFrame.Size
 local originalContentMaskFrameSize = contentMaskFrame.Size
