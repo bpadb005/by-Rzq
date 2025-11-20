@@ -167,7 +167,7 @@ layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.Parent = scrollFrame
 
 createScriptItem("Rzq", "Rayfield Interface Suite", function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Rayfield%20by%20Rzq.lua'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Rayfield/by%20Rzq.lua'))()
 end)
 
 createScriptItem("Fly", "Fly Like Admin", function()
