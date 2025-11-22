@@ -170,6 +170,10 @@ createScriptItem("Rzq", "Rayfield Interface Suite", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Rayfield/by%20Rzq.lua'))()
 end)
 
+createScriptItem("Private Server", "[PATCHED] by ROBLOX 凸ᓀ‸ᓂ凸", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Rayfield/%5BPATCHED%5D%20Private%20Server%20by%20Rzq.lua'))()
+end)
+
 createScriptItem("Fly", "Fly Like Admin", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Fly%20by%20Rzq.lua'))()
 end)
