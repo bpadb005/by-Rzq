@@ -104,14 +104,6 @@ local submitCorner = Instance.new("UICorner")
 submitCorner.CornerRadius = UDim.new(0, 8)
 submitCorner.Parent = submitButton
 
-local function flash(frame, color, duration)
-    duration = duration or 1
-    local original = frame.BackgroundColor3
-    frame.BackgroundColor3 = color
-    task.wait(duration)
-    frame.BackgroundColor3 = original
-end
-
 local isChecking = false
 
 local function isKeyCorrect(inputKey)
@@ -156,9 +148,13 @@ submitButton.MouseButton1Click:Connect(function()
 
     if isKeyCorrect(inputKey) then
         submitButton.Text = "Key Benar"
-        flash(submitButton, Color3.fromRGB(40, 120, 40), 0.6)
 
-        task.wait(0.3)
+        local originalColor = submitButton.BackgroundColor3
+        submitButton.BackgroundColor3 = Color3.fromRGB(40, 120, 40)
+
+        task.wait(1.5)
+
+        submitButton.BackgroundColor3 = originalColor
 
         local fadeTween = fadeObject(mainFrame, 0.4)
         fadeObject(titleLabel, 0.4)
@@ -167,17 +163,21 @@ submitButton.MouseButton1Click:Connect(function()
         fadeObject(closeButton, 0.4)
 
         fadeTween.Completed:Wait()
-
         mainGui:Destroy()
 
         local success, err = pcall(function()
             loadstring(game:HttpGet(scriptURL))()
         end)
         if not success then warn(err) end
-
     else
         submitButton.Text = "Key Salah"
-        flash(submitButton, Color3.fromRGB(150, 40, 40), 0.6)
+
+        local originalColor = submitButton.BackgroundColor3
+        submitButton.BackgroundColor3 = Color3.fromRGB(150, 40, 40)
+
+        task.wait(1.5)
+
+        submitButton.BackgroundColor3 = originalColor
         submitButton.Text = "Submit"
         submitButton.Active = true
     end
