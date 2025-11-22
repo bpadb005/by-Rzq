@@ -3,10 +3,10 @@ local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 
-local localKey = "Abc"
+local localKey = "Rzq"
 local useOnlineKey = false
 local onlineKeyURL = "https://pastebin.com/raw/xxxxxxxx"
-local scriptURL = "https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script%20Hub.lua"
+local scriptURL = "https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/ScriptHub.lua"
 
 local function getOnlineKey()
     local key = nil
