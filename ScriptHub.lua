@@ -202,6 +202,14 @@ createScriptItem("Sonic", "Sonic Mode", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Sonic%20by%20Rzq.lua'))()
 end)
 
+createScriptItem("TP Tool", "Inventory Tool", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/TP%20Tool%20by%20Rzq.lua'))()
+end)
+
+createScriptItem("NoClip Tool", "Inventory Tool", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/NoClip%20Tool%20by%20Rzq.lua'))()
+end)
+
 createScriptItem("F3X", "Building Tools by F3X", function()
     loadstring(game:GetObjects("rbxassetid://6695644299")[1].Source)()
 end)
