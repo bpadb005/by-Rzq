@@ -194,8 +194,12 @@ createScriptItem("XYZ", "Save Coordinates & Teleport", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/XYZ%20by%20Rzq.lua'))()
 end)
 
-createScriptItem("Teleport & Spectate", "Teleport & Spectate Player", function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Teleport%20%26%20Spectate%20by%20Rzq.lua'))()
+createScriptItem("Teleport | Spectate", "Teleport | Spectate Player", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/Teleport%20%7C%20Spectate%20by%20Rzq.lua'))()
+end)
+
+createScriptItem("ESP | Teleport", "ESP | Teleport Player", function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/bpadb005/by-Rzq/refs/heads/main/Script/ESP%20%7C%20Teleport%20by%20Rzq.lua'))()
 end)
 
 createScriptItem("Sonic", "Sonic Mode", function()
