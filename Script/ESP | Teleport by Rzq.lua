@@ -101,10 +101,10 @@ mouse.Button1Down:Connect(function()
     end
 end)
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "ESP|Teleport"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+local mainGui = Instance.new("ScreenGui")
+mainGui.Name = "ESP|Teleport"
+mainGui.ResetOnSpawn = false
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 120, 0, 30)
@@ -115,7 +115,7 @@ button.Text = "ESP|Teleport: ON\nby Rzq"
 button.TextSize = 14
 button.Font = Enum.Font.SourceSansBold
 button.AutoButtonColor = true
-button.Parent = gui
+button.Parent = mainGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 10)
