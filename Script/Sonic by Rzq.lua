@@ -59,11 +59,11 @@ local function fadeSound(sound, targetVolume, duration)
 end
 
 local function flashScreen()
-    local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-    gui.IgnoreGuiInset = true
-    gui.ResetOnSpawn = false
+    local mainGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    mainGui.IgnoreGuiInset = true
+    mainGui.ResetOnSpawn = false
 
-    local frame = Instance.new("Frame", gui)
+    local frame = Instance.new("Frame", mainGui)
     frame.Size = UDim2.new(1, 0, 1, 0)
     frame.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
     frame.BackgroundTransparency = 1
@@ -72,7 +72,7 @@ local function flashScreen()
     TweenService:Create(frame, TweenInfo.new(0.05), {BackgroundTransparency = 0.2}):Play()
     task.wait(0.05)
     TweenService:Create(frame, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
-    task.delay(0.35, function() gui:Destroy() end)
+    task.delay(0.35, function() mainGui:Destroy() end)
 end
 
 local function cameraShake(duration, magnitude)
@@ -256,10 +256,10 @@ end
 player.CharacterAdded:Connect(bindCharacter)
 if player.Character then bindCharacter(player.Character) end
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "Sonic"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+local mainGui = Instance.new("ScreenGui")
+mainGui.Name = "Sonic"
+mainGui.ResetOnSpawn = false
+mainGui.Parent = player:WaitForChild("PlayerGui")
 
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 50, 0, 25)
@@ -271,7 +271,7 @@ button.Font = Enum.Font.SourceSansBold
 button.TextScaled = true
 button.AutoButtonColor = false
 button.Draggable = true
-button.Parent = gui
+button.Parent = mainGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
