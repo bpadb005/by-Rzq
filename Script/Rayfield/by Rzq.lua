@@ -50,16 +50,23 @@ end
 local Button = Tab:CreateButton({
    Name = "Spawn",
    Callback = function()
-      teleportPosition(Vector3.new(335.15, 15.72, 181.39))
+      teleportPosition(Vector3.new(-))
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Summit",
+   Callback = function()
+      teleportPosition(Vector3.new(-))
    end,
 })
 
 local Section = Tab:CreateSection("Auto")
 
 local teleportList = {
-   Vector3.new(329.54, 15.52, 172.52),
-   Vector3.new(324.65, 11.59, 144.86),
-   Vector3.new(320.81, 11.61, 133.51),
+   Vector3.new(-),
+   Vector3.new(-),
+   Vector3.new(-),
 }
 
 local function teleportPositions(pos)
@@ -79,22 +86,34 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
+        autoTeleport = Value
+
         if Value then
-         task.spawn(function()
-            for _, pos in ipairs(teleportList) do
-               teleportPositions(pos)
+            task.spawn(function()
+                for _, pos in ipairs(teleportList) do
+                    if not autoTeleport then
+                        break
+                    end
 
-               local loopCount = math.floor(teleportDelay * 10)
-               for i = 1, loopCount do
-                  task.wait(0.1)
-               end
-            end
+                    teleportPositions(pos)
 
-            pcall(function()
-               Rayfield.Flags.Toggle1:Set(false)
+                    local loopCount = math.floor(teleportDelay * 10)
+                    for i = 1, loopCount do
+                        if not autoTeleport then
+                            break
+                        end
+
+                        task.wait(0.1)
+                    end
+                end
+
+                if autoTeleport then
+                    pcall(function()
+                        Rayfield.Flags.Toggle1:Set(false)
+                    end)
+                end
             end)
-         end)
-      end
+        end
    end,
 })
 
@@ -277,6 +296,66 @@ local Button = Tab:CreateButton({
          :GetService("CoreGui")
          .RobloxGui["CoreScripts/NetworkPause"]
          :Destroy()
+   end,
+})
+
+local Section = Tab:CreateSection("Server")
+
+local Button = Tab:CreateButton({
+   Name = "Rejoin Server",
+   Callback = function()
+      local TeleportService = game:GetService("TeleportService")
+      TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Small Server",
+   Callback = function()
+      local HttpService = game:GetService("HttpService")
+      local TeleportService = game:GetService("TeleportService")
+
+      local servers = HttpService:JSONDecode(
+         game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")
+      )
+
+      local smallestServer = nil
+      local lowestPlayers = math.huge
+
+      for _, server in ipairs(servers.data) do
+         if server.playing < lowestPlayers and server.id ~= game.JobId then
+            lowestPlayers = server.playing
+            smallestServer = server
+         end
+      end
+
+      if smallestServer then
+         TeleportService:TeleportToPlaceInstance(game.PlaceId, smallestServer.id, Players.LocalPlayer)
+      end
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Server Hop",
+   Callback = function()
+      local HttpService = game:GetService("HttpService")
+      local TeleportService = game:GetService("TeleportService")
+
+      local servers = HttpService:JSONDecode(
+         game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")
+      )
+
+      local validServers = {}
+      for _, server in ipairs(servers.data) do
+         if server.id ~= game.JobId then
+            table.insert(validServers, server)
+         end
+      end
+
+      if #validServers > 0 then
+         local picked = validServers[math.random(1, #validServers)]
+         TeleportService:TeleportToPlaceInstance(game.PlaceId, picked.id, Players.LocalPlayer)
+      end
    end,
 })
 
